@@ -1,6 +1,6 @@
-package org.example.enums;
+package org.example.model.enums;
 
-public enum Status {
+public enum StatusSolicitacao {
     ABERTO,
     TRIAGEM,
     EM_EXECUCAO,
