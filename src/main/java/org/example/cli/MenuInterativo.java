@@ -6,6 +6,7 @@ import org.example.service.ServicoSolicitacoes;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class MenuInterativo {
@@ -30,6 +31,7 @@ public class MenuInterativo {
             System.out.println("2. Consultar por Protocolo");
             System.out.println("3. Listar Solicitações Ativas (Servidor)");
             System.out.println("4. Atualizar Status (Servidor)");
+            System.out.println("5. Relatórios (Servidor)");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
             
@@ -40,6 +42,7 @@ public class MenuInterativo {
                     case 2: menuConsultarProtocolo(); break;
                     case 3: menuListarAtivas(); break;
                     case 4: menuAtualizarStatus(); break;
+                    case 5: menuRelatorios(); break;
                     case 0: System.out.println("Saindo..."); break;
                     default: System.out.println("Opção inválida!");
                 }
@@ -107,6 +110,26 @@ public class MenuInterativo {
 
         servico.atualizarStatus(protocolo, novo, comentario, servidorExemplo);
         System.out.println("✓ Status atualizado!");
+    }
+
+    private void menuRelatorios() {
+        System.out.println("\n--- Relatórios do Sistema ---");
+        System.out.println("1. Quantidade por Prioridade");
+        System.out.println("2. Quantidade por Categoria");
+        System.out.print("Escolha uma opção de relatório: ");
+        
+        int relOp = Integer.parseInt(scanner.nextLine());
+        if (relOp == 1) {
+            Map<Prioridade, Long> relatorio = servico.gerarRelatorioPorPrioridade(servidorExemplo);
+            System.out.println("\n--- Solicitações por Prioridade ---");
+            relatorio.forEach((prio, qtd) -> System.out.println(prio + ": " + qtd));
+        } else if (relOp == 2) {
+            Map<CategoriaSossego, Long> relatorio = servico.gerarRelatorioPorCategoria(servidorExemplo);
+            System.out.println("\n--- Solicitações por Categoria ---");
+            relatorio.forEach((cat, qtd) -> System.out.println(cat + ": " + qtd));
+        } else {
+            System.out.println("Opção inválida!");
+        }
     }
 
     private void exibirDetalhes(Solicitacao s) {

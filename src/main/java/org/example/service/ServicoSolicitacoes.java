@@ -7,6 +7,7 @@ import org.example.repository.IRepositorioSolicitacoes;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -66,6 +67,24 @@ public class ServicoSolicitacoes {
         );
         solicitacao.adicionarHistorico(historico);
         solicitacao.setStatusAtual(novoStatus);
+    }
+
+    public Map<Prioridade, Long> gerarRelatorioPorPrioridade(Servidor servidor) {
+        if (servidor == null) {
+            throw new SecurityException("Apenas servidores podem acessar os relatórios.");
+        }
+
+        return repositorio.listarTodas().stream()
+                .collect(Collectors.groupingBy(Solicitacao::getPrioridade, Collectors.counting()));
+    }
+
+    public Map<CategoriaSossego, Long> gerarRelatorioPorCategoria(Servidor servidor) {
+        if (servidor == null) {
+            throw new SecurityException("Apenas servidores podem acessar os relatórios.");
+        }
+
+        return repositorio.listarTodas().stream()
+                .collect(Collectors.groupingBy(Solicitacao::getCategoria, Collectors.counting()));
     }
 
     private void validarAbuso(String descricao, String endereco) {
