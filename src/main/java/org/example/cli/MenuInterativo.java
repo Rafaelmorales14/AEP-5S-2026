@@ -63,6 +63,8 @@ public class MenuInterativo {
             default -> CategoriaSossego.OBRAS_IRREGULARES;
         };
 
+        exibirInstrucoesCategoria(categoria);
+
         System.out.print("Descrição do problema: ");
         String desc = scanner.nextLine();
         System.out.print("Endereço da ocorrência: ");
@@ -130,6 +132,29 @@ public class MenuInterativo {
         } else {
             System.out.println("Opção inválida!");
         }
+    }
+
+    private void exibirInstrucoesCategoria(CategoriaSossego categoria) {
+        System.out.println("\nInstruções para a categoria selecionada:");
+        switch (categoria) {
+            case VEICULO_SOM_ALTO -> {
+                System.out.println("- Informe onde está o veículo.");
+                System.out.println("- Descreva se o som está parado ou em movimento e há quanto tempo está alto.");
+            }
+            case FESTA_RESIDENCIAL -> {
+                System.out.println("- Informe o endereço da residência.");
+                System.out.println("- Descreva o tipo de som e o horário em que começou.");
+            }
+            case OBRAS_IRREGULARES -> {
+                System.out.println("- Informe o local da obra.");
+                System.out.println("- Descreva o tipo de barulho e o horário em que ocorre.");
+            }
+            case BAR_CASA_NOTURNA -> {
+                System.out.println("- Informe o nome ou endereço do local.");
+                System.out.println("- Descreva o tipo de som e se acontece com frequência.");
+            }
+        }
+        System.out.println();
     }
 
     private void exibirDetalhes(Solicitacao s) {
