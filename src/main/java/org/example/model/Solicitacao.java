@@ -32,8 +32,9 @@ public class Solicitacao {
         this.isAnonima = isAnonima;
         if(isAnonima){
             this.cidadaoId = null;
+        } else {
+            this.cidadaoId = cidadaoId;
         }
-        this.cidadaoId = cidadaoId;
         this.statusAtual = statusAtual;
         this.prioridade = prioridade;
         this.dataCriacao = dataCriacao;
