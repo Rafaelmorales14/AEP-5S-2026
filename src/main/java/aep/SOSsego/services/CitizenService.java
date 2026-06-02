@@ -46,6 +46,10 @@ public class CitizenService {
                 orElseThrow(() -> new RuntimeException("Cidadao nao existe"));
 
         citizenExistant.setName(citizen.getName());
+        if (citizenExistant.getCpf().equals(citizen.getCpf())
+                && repository.existsByCpf(citizen.getCpf())) {
+            throw new RuntimeException("CPF ja cadastrado");
+        }
         citizenExistant.setCpf(citizen.getCpf());
         citizenExistant.setContact(citizen.getContact());
 

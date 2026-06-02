@@ -42,17 +42,21 @@ public class PublicServantService {
     }
 
     public PublicServantModel update(Long id, PublicServantModel servant) {
-        PublicServantModel servantExistant = repository.
+        PublicServantModel existingServant = repository.
                 findById(id).
                 orElseThrow(() -> new RuntimeException("Servidor nao existe"));
 
-        servantExistant.setName(servant.getName());
-        servantExistant.setCpf(servant.getCpf());
-        servantExistant.setContact(servant.getContact());
-        servantExistant.setRegistration(servant.getRegistration());
-        servantExistant.setPosition(servant.getPosition());
+        existingServant.setName(servant.getName());
+        if(!existingServant.getCpf().equals(servant.getCpf())
+                && repository.existsByCpf(servant.getCpf())) {
+            throw new RuntimeException("CPF ja cadastrado");
+        }
+        existingServant.setCpf(servant.getCpf());
+        existingServant.setContact(servant.getContact());
+        existingServant.setRegistration(servant.getRegistration());
+        existingServant.setPosition(servant.getPosition());
 
-        return repository.save(servantExistant);
+        return repository.save(existingServant);
     }
 
 }
