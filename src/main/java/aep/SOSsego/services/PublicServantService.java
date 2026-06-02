@@ -24,10 +24,8 @@ public class PublicServantService {
         return repository.save(servant);
     }
 
-    public PublicServantModel findById(Long id) {
-        return repository.
-                findById(id).
-                orElseThrow(() -> new RuntimeException("Servidor nao existe"));
+    public Optional<PublicServantModel> findById(Long id) {
+        return repository.findById(id);
     }
 
     public List<PublicServantModel> findAll() {

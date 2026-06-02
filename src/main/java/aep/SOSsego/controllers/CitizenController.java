@@ -28,7 +28,10 @@ public class CitizenController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CitizenModel> findById(@PathVariable("id") Long id) {
-        return service.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return service.
+                findById(id).
+                map(ResponseEntity::ok).
+                orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping

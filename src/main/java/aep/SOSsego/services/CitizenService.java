@@ -33,9 +33,9 @@ public class CitizenService {
     }
 
     public void deleteById(Long id) {
-        if(!repository.existsById(id)) {
-            throw new RuntimeException("Cidadao nao existe");
-        }
+        repository.
+                findById(id).
+                orElseThrow(() -> new RuntimeException("Cidadao nao existe"));
 
         repository.deleteById(id);
     }
