@@ -17,6 +17,10 @@ public class CitizenService {
     }
 
     public CitizenModel save(CitizenModel citizen) {
+        if (repository.existsByCpf(citizen.getCpf())) {
+            throw new RuntimeException("Cpf ja cadastrado");
+        }
+
         return repository.save(citizen);
     }
 
