@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PublicServantRepository extends JpaRepository<PublicServantModel, Long> {
+    Boolean existsByCpf(String cpf);
 }
