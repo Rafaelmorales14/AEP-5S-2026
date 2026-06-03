@@ -51,15 +51,14 @@ public class PublicServantController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PublicServantModel> update(@PathVariable("id") Long id,
-                                                     @RequestBody PublicServantModel servant){
+                                                     @RequestBody PublicServantModel servant) {
 
         PublicServantModel servantUpdated = service.update(id, servant);
 
-        if(service.findById(id).isEmpty()) {
+        if (service.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        
+
         return ResponseEntity.ok(servantUpdated);
     }
-
 }
