@@ -1,7 +1,7 @@
 package aep.SOSsego.models;
 
 import aep.SOSsego.enums.CategoryEnum;
-import aep.SOSsego.enums.PropertyEnum;
+import aep.SOSsego.enums.PriorityEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +32,7 @@ public class SolicitationModel {
     private Boolean isAnonymous;
 
     @Enumerated(EnumType.STRING)
-    private PropertyEnum property;
+    private PriorityEnum priority;
 
     @ManyToOne
     @JoinColumn(name = "citizen_id")

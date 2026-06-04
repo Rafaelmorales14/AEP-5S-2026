@@ -1,6 +1,6 @@
 package aep.SOSsego.enums;
 
-public enum PropertyEnum {
+public enum PriorityEnum {
     BAIXA,
     MEDIA,
     ALTA,

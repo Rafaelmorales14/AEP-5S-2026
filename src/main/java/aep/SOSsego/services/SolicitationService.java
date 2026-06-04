@@ -1,6 +1,5 @@
 package aep.SOSsego.services;
 
-import aep.SOSsego.models.CitizenModel;
 import aep.SOSsego.models.SolicitationModel;
 import aep.SOSsego.repositories.SolicitationRepository;
 import org.springframework.stereotype.Service;
@@ -13,14 +12,26 @@ public class SolicitationService {
 
     private final SolicitationRepository repository;
     private final ProtocolService protocol;
+    private final CalculatorSLAService calculator;
+    private final PriorityService priorityService;
 
-    public SolicitationService(SolicitationRepository repository, ProtocolService protocol) {
+    public SolicitationService(SolicitationRepository repository,
+                               ProtocolService protocol,
+                               CalculatorSLAService calculator,
+                               PriorityService priority) {
         this.repository = repository;
         this.protocol = protocol;
+        this.calculator = calculator;
+        this.priorityService = priority;
     }
 
     public SolicitationModel save(SolicitationModel solicitation) {
         solicitation.setProtocol(protocol.generateProtocol());
+        solicitation.setDateSLA(calculator.calculateSLA(solicitation.getCategory()));
+        solicitation.setPriority(priorityService.definePriority(solicitation.getCategory()));
+        if (solicitation.getIsAnonymous()) {
+            solicitation.setCitizen(null);
+        }
         return repository.save(solicitation);
     }
 
@@ -50,10 +61,10 @@ public class SolicitationService {
         existingSolicitation.setCategory(solicitation.getCategory());
         existingSolicitation.setAddress(solicitation.getAddress());
         existingSolicitation.setIsAnonymous(solicitation.getIsAnonymous());
-        existingSolicitation.setProperty(solicitation.getProperty());
-        existingSolicitation.setCitizen(solicitation.getCitizen());
+        if(!solicitation.getIsAnonymous()){
+            existingSolicitation.setCitizen(solicitation.getCitizen());
+        }
 
         return repository.save(existingSolicitation);
     }
-
 }
