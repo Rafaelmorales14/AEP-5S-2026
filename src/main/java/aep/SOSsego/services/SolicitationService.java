@@ -32,6 +32,10 @@ public class SolicitationService {
         return repository.findAll();
     }
 
+    public Optional<SolicitationModel> findByProtocol(String protocol) {
+        return repository.findByProtocol(protocol);
+    }
+
     public void deleteById(Long id) {
         repository.findById(id).
                 orElseThrow(() -> new RuntimeException("Solicitacao nao existe"));

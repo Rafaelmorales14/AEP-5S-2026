@@ -40,6 +40,13 @@ public class SolicitationController {
         return ResponseEntity.ok().body(solicitations);
     }
 
+    @GetMapping("/protocol/{protocol}")
+    public ResponseEntity<SolicitationModel> findByProtocol(@PathVariable("protocol") String protocol) {
+        return service.findByProtocol(protocol).
+                map(ResponseEntity::ok).
+                orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         if(service.findById(id).isEmpty()) {
