@@ -12,12 +12,15 @@ import java.util.Optional;
 public class SolicitationService {
 
     private final SolicitationRepository repository;
+    private final ProtocolService protocol;
 
-    public SolicitationService(SolicitationRepository repository) {
+    public SolicitationService(SolicitationRepository repository, ProtocolService protocol) {
         this.repository = repository;
+        this.protocol = protocol;
     }
 
     public SolicitationModel save(SolicitationModel solicitation) {
+        solicitation.setProtocol(protocol.generateProtocol());
         return repository.save(solicitation);
     }
 
@@ -40,7 +43,6 @@ public class SolicitationService {
         SolicitationModel existingSolicitation = repository.findById(id).
                 orElseThrow(() -> new RuntimeException("Solicitacao nao existe"));
 
-        existingSolicitation.setProtocol(solicitation.getProtocol());
         existingSolicitation.setCategory(solicitation.getCategory());
         existingSolicitation.setAddress(solicitation.getAddress());
         existingSolicitation.setIsAnonymous(solicitation.getIsAnonymous());
