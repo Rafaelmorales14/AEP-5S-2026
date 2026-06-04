@@ -19,7 +19,7 @@ public class SolicitationController {
     }
 
     @PostMapping
-    public ResponseEntity<SolicitationModel> save(SolicitationModel solicitation) {
+    public ResponseEntity<SolicitationModel> save(@RequestBody SolicitationModel solicitation) {
         SolicitationModel solicitationSaved = service.save(solicitation);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(solicitationSaved);
@@ -49,6 +49,7 @@ public class SolicitationController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
     public ResponseEntity<SolicitationModel> update(@PathVariable("id") Long id, @RequestBody SolicitationModel solicitation) {
         if(service.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -56,6 +57,4 @@ public class SolicitationController {
         SolicitationModel solicitationUpdated = service.update(id, solicitation);
         return ResponseEntity.ok(solicitationUpdated);
     }
-
-    
 }

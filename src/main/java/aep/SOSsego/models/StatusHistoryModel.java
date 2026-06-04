@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +21,7 @@ public class StatusHistoryModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @CreatedDate
     private LocalDateTime dataHora;
     private StatusSolicitationEnum statusAnterior;
     private StatusSolicitationEnum statusNovo;

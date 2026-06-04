@@ -41,18 +41,18 @@ public class CitizenService {
     }
 
     public CitizenModel update(Long id, CitizenModel citizen) {
-        CitizenModel citizenExistant  = repository.
+        CitizenModel existingCitizen  = repository.
                 findById(id).
                 orElseThrow(() -> new RuntimeException("Cidadao nao existe"));
 
-        citizenExistant.setName(citizen.getName());
-        if (citizenExistant.getCpf().equals(citizen.getCpf())
+        existingCitizen.setName(citizen.getName());
+        if (existingCitizen.getCpf().equals(citizen.getCpf())
                 && repository.existsByCpf(citizen.getCpf())) {
             throw new RuntimeException("CPF ja cadastrado");
         }
-        citizenExistant.setCpf(citizen.getCpf());
-        citizenExistant.setContact(citizen.getContact());
+        existingCitizen.setCpf(citizen.getCpf());
+        existingCitizen.setContact(citizen.getContact());
 
-        return repository.save(citizenExistant);
+        return repository.save(existingCitizen);
     }
 }
