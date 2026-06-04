@@ -2,12 +2,13 @@ package aep.SOSsego.models;
 
 import aep.SOSsego.enums.CategoryEnum;
 import aep.SOSsego.enums.PriorityEnum;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,8 +24,10 @@ public class SolicitationModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
     private String protocol;
+    private String description;
 
     @Enumerated(EnumType.STRING)
     private CategoryEnum category;
@@ -36,8 +39,11 @@ public class SolicitationModel {
 
     @ManyToOne
     @JoinColumn(name = "citizen_id")
+    @JsonBackReference
     private CitizenModel citizen;
-    @CreatedDate
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
     private LocalDateTime dateSLA;
 

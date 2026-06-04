@@ -1,5 +1,6 @@
 package aep.SOSsego.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -18,5 +19,6 @@ import java.util.List;
 @SuperBuilder
 public class CitizenModel extends UserModel{
     @OneToMany(mappedBy = "citizen")
+    @JsonManagedReference
     private List<SolicitationModel> solicitation;
 }

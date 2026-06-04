@@ -67,4 +67,7 @@ public class SolicitationService {
 
         return repository.save(existingSolicitation);
     }
+
+//    public Boolean validateLenght(String address) {
+//    }
 }
