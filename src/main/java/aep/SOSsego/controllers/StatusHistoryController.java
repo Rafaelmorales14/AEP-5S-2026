@@ -39,24 +39,4 @@ public class StatusHistoryController {
 
         return ResponseEntity.ok().body(statusHistories);
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
-        if(service.findById(id).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        service.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<StatusHistoryModel> update(@PathVariable("id") Long id, @RequestBody StatusHistoryModel statusHistory) {
-        if(service.findById(id).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        StatusHistoryModel statusHistoryUpdated = service.update(id, statusHistory);
-        return ResponseEntity.ok(statusHistoryUpdated);
-    }
 }

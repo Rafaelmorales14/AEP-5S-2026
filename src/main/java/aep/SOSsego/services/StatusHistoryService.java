@@ -27,24 +27,4 @@ public class StatusHistoryService {
     public List<StatusHistoryModel> findAll() {
         return repository.findAll();
     }
-
-    public void deleteById(Long id) {
-        repository.findById(id).
-                orElseThrow(() -> new RuntimeException("Historico nao existe"));
-
-        repository.deleteById(id);
-    }
-
-    public StatusHistoryModel update(Long id, StatusHistoryModel statusHistory) {
-        StatusHistoryModel existingStatusHistory = repository.findById(id).
-                orElseThrow(() -> new RuntimeException("Historico nao existe"));
-
-        existingStatusHistory.setStatusAnterior(statusHistory.getStatusAnterior());
-        existingStatusHistory.setStatusNovo(statusHistory.getStatusNovo());
-        existingStatusHistory.setComentarioObrigatorio(statusHistory.getComentarioObrigatorio());
-        existingStatusHistory.setPublicServant(statusHistory.getPublicServant());
-        existingStatusHistory.setSolicitation(statusHistory.getSolicitation());
-
-        return repository.save(existingStatusHistory);
-    }
 }

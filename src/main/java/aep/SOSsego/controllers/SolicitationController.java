@@ -2,6 +2,7 @@ package aep.SOSsego.controllers;
 
 import aep.SOSsego.models.SolicitationModel;
 import aep.SOSsego.services.SolicitationService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class SolicitationController {
     }
 
     @PostMapping
-    public ResponseEntity<SolicitationModel> save(@RequestBody SolicitationModel solicitation) {
+    public ResponseEntity<SolicitationModel> save(@Valid @RequestBody SolicitationModel solicitation) {
         SolicitationModel solicitationSaved = service.save(solicitation);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(solicitationSaved);
@@ -57,7 +58,8 @@ public class SolicitationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SolicitationModel> update(@PathVariable("id") Long id, @RequestBody SolicitationModel solicitation) {
+    public ResponseEntity<SolicitationModel> update(@PathVariable("id") Long id,
+                                                    @Valid @RequestBody SolicitationModel solicitation) {
         if(service.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }

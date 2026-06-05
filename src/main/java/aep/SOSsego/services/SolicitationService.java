@@ -1,5 +1,6 @@
 package aep.SOSsego.services;
 
+import aep.SOSsego.enums.StatusSolicitationEnum;
 import aep.SOSsego.models.SolicitationModel;
 import aep.SOSsego.repositories.SolicitationRepository;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class SolicitationService {
         solicitation.setProtocol(protocol.generateProtocol());
         solicitation.setDateSLA(calculator.calculateSLA(solicitation.getCategory()));
         solicitation.setPriority(priorityService.definePriority(solicitation.getCategory()));
+        solicitation.setCurrentlyStatus(StatusSolicitationEnum.ABERTO);
         if (solicitation.getIsAnonymous()) {
             solicitation.setCitizen(null);
         }
@@ -67,4 +69,6 @@ public class SolicitationService {
 
         return repository.save(existingSolicitation);
     }
+
+
 }

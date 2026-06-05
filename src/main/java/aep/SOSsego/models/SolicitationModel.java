@@ -2,8 +2,10 @@ package aep.SOSsego.models;
 
 import aep.SOSsego.enums.CategoryEnum;
 import aep.SOSsego.enums.PriorityEnum;
+import aep.SOSsego.enums.StatusSolicitationEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,10 +29,17 @@ public class SolicitationModel {
 
     @Column(unique = true)
     private String protocol;
+
+    @Size(min = 10, message = "A descrição deve ter no mínimo 10 caracteres")
     private String description;
 
     @Enumerated(EnumType.STRING)
     private CategoryEnum category;
+
+    @Enumerated(EnumType.STRING)
+    private StatusSolicitationEnum currentlyStatus;
+
+    @Size(min = 10, message = "Endereço muito curto (mínimo 5 caracteres)")
     private String address;
     private Boolean isAnonymous;
 
