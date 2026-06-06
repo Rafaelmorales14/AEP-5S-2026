@@ -1,6 +1,8 @@
 package aep.SOSsego.controllers;
 
+import aep.SOSsego.dtos.UpdateStatusDTO;
 import aep.SOSsego.models.SolicitationModel;
+import aep.SOSsego.models.StatusHistoryModel;
 import aep.SOSsego.services.SolicitationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,15 @@ public class SolicitationController {
         SolicitationModel solicitationSaved = service.save(solicitation);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(solicitationSaved);
+    }
+
+    @PostMapping("/{protocol}/status")
+    public ResponseEntity<SolicitationModel> updateStatus(@PathVariable("protocol") String protocol,
+                                                          @RequestBody UpdateStatusDTO dto) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).
+                body(service.updateStatus
+                        (protocol, dto.newStatus(), dto.comment(), dto.publicServantId()));
     }
 
     @GetMapping("/{id}")

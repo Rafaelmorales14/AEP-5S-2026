@@ -83,6 +83,7 @@ public class SolicitationService {
         repository.deleteById(id);
     }
 
+    @Transactional
     public SolicitationModel update(Long id, SolicitationModel solicitation) {
         SolicitationModel existingSolicitation = repository.findById(id).
                 orElseThrow(() -> new RuntimeException("Solicitacao nao existe"));
@@ -110,6 +111,7 @@ public class SolicitationService {
         return repository.save(existingSolicitation);
     }
 
+    @Transactional
     public SolicitationModel updateStatus(String protocol,
                                           StatusSolicitationEnum newStatus,
                                           String comment,
