@@ -19,6 +19,6 @@ import java.util.List;
 @SuperBuilder
 public class CitizenModel extends UserModel{
     @OneToMany(mappedBy = "citizen")
-    @JsonManagedReference
+    @JsonManagedReference("citizen-solicitation")
     private List<SolicitationModel> solicitation;
 }

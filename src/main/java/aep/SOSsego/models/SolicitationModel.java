@@ -4,6 +4,7 @@ import aep.SOSsego.enums.CategoryEnum;
 import aep.SOSsego.enums.PriorityEnum;
 import aep.SOSsego.enums.StatusSolicitationEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -48,7 +49,7 @@ public class SolicitationModel {
 
     @ManyToOne
     @JoinColumn(name = "citizen_id")
-    @JsonBackReference
+    @JsonBackReference("citizen-solicitation")
     private CitizenModel citizen;
 
     @CreationTimestamp
@@ -57,5 +58,6 @@ public class SolicitationModel {
     private LocalDateTime dateSLA;
 
     @OneToMany(mappedBy = "solicitation")
+    @JsonManagedReference("solicitation-history")
     private List<StatusHistoryModel> statusHistory;
 }

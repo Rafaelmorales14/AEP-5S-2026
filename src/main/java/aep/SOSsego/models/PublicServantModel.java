@@ -1,5 +1,6 @@
 package aep.SOSsego.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -21,5 +22,6 @@ public class PublicServantModel extends UserModel{
     private String registration;
     private String position;
     @OneToMany(mappedBy = "publicServant")
+    @JsonManagedReference("public-servant")
     private List<StatusHistoryModel> statusHistory;
 }

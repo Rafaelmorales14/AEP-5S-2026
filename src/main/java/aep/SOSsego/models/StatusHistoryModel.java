@@ -1,6 +1,7 @@
 package aep.SOSsego.models;
 
 import aep.SOSsego.enums.StatusSolicitationEnum;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -34,10 +35,12 @@ public class StatusHistoryModel {
 
     @ManyToOne
     @JoinColumn(name = "publicServant_id")
+    @JsonBackReference("public-servant")
     private PublicServantModel publicServant;
 
     @ManyToOne
     @JoinColumn(name = "solicitation_id")
+    @JsonBackReference("solicitation-history")
     private SolicitationModel solicitation;
 
 }
