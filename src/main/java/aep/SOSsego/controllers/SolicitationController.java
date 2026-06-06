@@ -2,7 +2,6 @@ package aep.SOSsego.controllers;
 
 import aep.SOSsego.dtos.UpdateStatusDTO;
 import aep.SOSsego.models.SolicitationModel;
-import aep.SOSsego.models.StatusHistoryModel;
 import aep.SOSsego.services.SolicitationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
