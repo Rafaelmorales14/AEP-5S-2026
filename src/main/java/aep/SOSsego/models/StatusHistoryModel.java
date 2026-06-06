@@ -2,6 +2,8 @@ package aep.SOSsego.models;
 
 import aep.SOSsego.enums.StatusSolicitationEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +28,8 @@ public class StatusHistoryModel {
     private LocalDateTime dataHora;
     private StatusSolicitationEnum statusAnterior;
     private StatusSolicitationEnum statusNovo;
+
+    @Size(min = 10, message = "Comentario muito curto (minimo 10 caracteres)")
     private String comentarioObrigatorio;
 
     @ManyToOne

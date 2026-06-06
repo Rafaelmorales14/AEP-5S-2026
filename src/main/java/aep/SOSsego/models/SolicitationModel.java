@@ -39,7 +39,7 @@ public class SolicitationModel {
     @Enumerated(EnumType.STRING)
     private StatusSolicitationEnum currentlyStatus;
 
-    @Size(min = 10, message = "Endereço muito curto (mínimo 5 caracteres)")
+    @Size(min = 10, message = "Endereço muito curto (mínimo 10 caracteres)")
     private String address;
     private Boolean isAnonymous;
 

@@ -8,16 +8,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StatusHistoryService {
+public class UpdateHistoryService {
 
     private final StatusHistoryRepository repository;
 
-    public StatusHistoryService(StatusHistoryRepository repository) {
+    public UpdateHistoryService(StatusHistoryRepository repository) {
         this.repository = repository;
-    }
-
-    public StatusHistoryModel save(StatusHistoryModel statusHistory) {
-        return repository.save(statusHistory);
     }
 
     public Optional<StatusHistoryModel> findById(Long id) {

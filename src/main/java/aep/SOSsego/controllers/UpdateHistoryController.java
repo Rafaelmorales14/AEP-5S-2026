@@ -1,7 +1,7 @@
 package aep.SOSsego.controllers;
 
 import aep.SOSsego.models.StatusHistoryModel;
-import aep.SOSsego.services.StatusHistoryService;
+import aep.SOSsego.services.UpdateHistoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,19 +10,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/historico")
-public class StatusHistoryController {
+public class UpdateHistoryController {
 
-    private final StatusHistoryService service;
+    private final UpdateHistoryService service;
 
-    public StatusHistoryController(StatusHistoryService service) {
+    public UpdateHistoryController(UpdateHistoryService service) {
         this.service = service;
-    }
-
-    @PostMapping
-    public ResponseEntity<StatusHistoryModel> save(@RequestBody StatusHistoryModel statusHistory) {
-        StatusHistoryModel statusHistorySaved = service.save(statusHistory);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(statusHistorySaved);
     }
 
     @GetMapping("/{id}")
