@@ -27,8 +27,8 @@ public class SolicitationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(solicitationSaved);
     }
 
-    @PostMapping("/{protocol}/status")
-    public ResponseEntity<SolicitationModel> updateStatus(@PathVariable("protocol") String protocol,
+    @PostMapping("/{protocolo}/status")
+    public ResponseEntity<SolicitationModel> updateStatus(@PathVariable("protocolo") String protocol,
                                                           @RequestBody UpdateStatusDTO dto) {
 
         return ResponseEntity.status(HttpStatus.CREATED).
@@ -51,8 +51,8 @@ public class SolicitationController {
         return ResponseEntity.ok().body(solicitations);
     }
 
-    @GetMapping("/protocol/{protocol}")
-    public ResponseEntity<SolicitationModel> findByProtocol(@PathVariable("protocol") String protocol) {
+    @GetMapping("/protocolo/{protocolo}")
+    public ResponseEntity<SolicitationModel> findByProtocol(@PathVariable("protocolo") String protocol) {
         return service.findByProtocol(protocol).
                 map(ResponseEntity::ok).
                 orElse(ResponseEntity.notFound().build());
