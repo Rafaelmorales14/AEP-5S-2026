@@ -32,6 +32,10 @@ public class SecurityConfig {
                                 "/auth/login",
                                 "/auth/register"
                         ).permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/servidor").hasRole("ADMIN")
+                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/servidor/**").hasRole("ADMIN")
+                        .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/servidor/**").hasRole("ADMIN")
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/servidor/**").hasAnyRole("ADMIN", "SERVIDOR_PUBLICO")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

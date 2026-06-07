@@ -1,8 +1,11 @@
 package aep.SOSsego.services;
 
 import aep.SOSsego.enums.StatusSolicitationEnum;
+import aep.SOSsego.dtos.SolicitationCreateDTO;
+import aep.SOSsego.models.CitizenModel;
 import aep.SOSsego.models.PublicServantModel;
 import aep.SOSsego.models.SolicitationModel;
+import aep.SOSsego.repositories.CitizenRepository;
 import aep.SOSsego.models.StatusHistoryModel;
 import aep.SOSsego.repositories.PublicServantRepository;
 import aep.SOSsego.repositories.SolicitationRepository;
@@ -24,13 +27,16 @@ public class SolicitationService {
     private final ValidateTransitionService validateTransitionService;
     private final PublicServantRepository publicServantRepository;
 
+    private final CitizenRepository citizenRepository;
+
     public SolicitationService(SolicitationRepository repository,
                                ProtocolService protocol,
                                CalculatorSLAService calculator,
                                PriorityService priority,
                                StatusHistoryRepository historyRepository,
                                ValidateTransitionService validateTransitionService,
-                               PublicServantRepository publicServantRepository) {
+                               PublicServantRepository publicServantRepository,
+                               CitizenRepository citizenRepository) {
         this.repository = repository;
         this.protocol = protocol;
         this.calculator = calculator;
@@ -38,16 +44,28 @@ public class SolicitationService {
         this.historyRepository = historyRepository;
         this.validateTransitionService = validateTransitionService;
         this.publicServantRepository = publicServantRepository;
+        this.citizenRepository = citizenRepository;
     }
 
     @Transactional
-    public SolicitationModel save(SolicitationModel solicitation) {
+    public SolicitationModel save(SolicitationCreateDTO dto, String citizenEmail) {
+        SolicitationModel solicitation = new SolicitationModel();
+        solicitation.setDescription(dto.description());
+        solicitation.setCategory(dto.category());
+        solicitation.setAddress(dto.address());
+        solicitation.setIsAnonymous(dto.isAnonymous());
+
         solicitation.setProtocol(protocol.generateProtocol());
         solicitation.setDateSLA(calculator.calculateSLA(solicitation.getCategory()));
         solicitation.setPriority(priorityService.definePriority(solicitation.getCategory()));
         solicitation.setCurrentlyStatus(StatusSolicitationEnum.ABERTO);
-        if (solicitation.getIsAnonymous()) {
+
+        if (Boolean.TRUE.equals(solicitation.getIsAnonymous())) {
             solicitation.setCitizen(null);
+        } else {
+            CitizenModel citizen = citizenRepository.findByEmail(citizenEmail)
+                    .orElseThrow(() -> new RuntimeException("Cidadão não encontrado"));
+            solicitation.setCitizen(citizen);
         }
 
         SolicitationModel saved = repository.save(solicitation);
@@ -84,28 +102,27 @@ public class SolicitationService {
     }
 
     @Transactional
-    public SolicitationModel update(Long id, SolicitationModel solicitation) {
+    public SolicitationModel update(Long id, SolicitationCreateDTO dto, String citizenEmail) {
         SolicitationModel existingSolicitation = repository.findById(id).
                 orElseThrow(() -> new RuntimeException("Solicitacao nao existe"));
 
-        if(solicitation.getPriority() != existingSolicitation.getPriority()) {
-            throw new IllegalArgumentException("Prioridade nao pode ser alterada");
+        CitizenModel citizen = citizenRepository.findByEmail(citizenEmail)
+                .orElseThrow(() -> new RuntimeException("Cidadão não encontrado"));
+
+        if (!existingSolicitation.getIsAnonymous() && 
+            (existingSolicitation.getCitizen() == null || !existingSolicitation.getCitizen().getId().equals(citizen.getId()))) {
+            throw new RuntimeException("Você não tem permissão para alterar esta solicitação");
         }
 
-        if(solicitation.getCurrentlyStatus() != existingSolicitation.getCurrentlyStatus()) {
-            throw new IllegalArgumentException("Status nao pode ser alterado");
-        }
+        existingSolicitation.setCategory(dto.category());
+        existingSolicitation.setAddress(dto.address());
+        existingSolicitation.setDescription(dto.description());
 
-        existingSolicitation.setCategory(solicitation.getCategory());
-        existingSolicitation.setAddress(solicitation.getAddress());
-
-        existingSolicitation.setIsAnonymous(solicitation.getIsAnonymous());
-        if (Boolean.TRUE.equals(solicitation.getIsAnonymous())) {
+        existingSolicitation.setIsAnonymous(dto.isAnonymous());
+        if (Boolean.TRUE.equals(dto.isAnonymous())) {
             existingSolicitation.setCitizen(null);
         } else {
-            existingSolicitation.setCitizen(
-                    solicitation.getCitizen()
-            );
+            existingSolicitation.setCitizen(citizen);
         }
 
         return repository.save(existingSolicitation);
@@ -115,7 +132,7 @@ public class SolicitationService {
     public SolicitationModel updateStatus(String protocol,
                                           StatusSolicitationEnum newStatus,
                                           String comment,
-                                          Long publicServantId) {
+                                          String publicServantEmail) {
 
         SolicitationModel solicitation = repository.
                 findByProtocol(protocol).
@@ -123,7 +140,7 @@ public class SolicitationService {
                     new RuntimeException("Solicitacao nao existe"));
 
         PublicServantModel publicServantSaved = publicServantRepository.
-                findById(publicServantId).
+                findByEmail(publicServantEmail).
                 orElseThrow(() ->
                         new RuntimeException("Servidor nao existe"));
 

@@ -19,21 +19,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<LoginResponseDTO> register(@RequestBody RegisterDTO registerDTO) {
-        authService.register(registerDTO);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(registerDTO));
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<String> register() {
-        System.out.println("CHEGOU");
-        return ResponseEntity.ok("funcionou");
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
-        authService.login(dto);
-
         return ResponseEntity.ok(authService.login(dto));
     }
 
@@ -42,3 +32,4 @@ public class AuthController {
         return "Autenticado";
     }
 }
+

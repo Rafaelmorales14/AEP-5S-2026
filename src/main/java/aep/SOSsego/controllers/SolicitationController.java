@@ -1,11 +1,14 @@
 package aep.SOSsego.controllers;
 
 import aep.SOSsego.dtos.UpdateStatusDTO;
+import aep.SOSsego.dtos.SolicitationCreateDTO;
 import aep.SOSsego.models.SolicitationModel;
+import aep.SOSsego.models.UserModel;
 import aep.SOSsego.services.SolicitationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,19 +24,21 @@ public class SolicitationController {
     }
 
     @PostMapping
-    public ResponseEntity<SolicitationModel> save(@Valid @RequestBody SolicitationModel solicitation) {
-        SolicitationModel solicitationSaved = service.save(solicitation);
+    public ResponseEntity<SolicitationModel> save(@Valid @RequestBody SolicitationCreateDTO solicitation,
+                                                  @AuthenticationPrincipal UserModel user) {
+        SolicitationModel solicitationSaved = service.save(solicitation, user.getEmail());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(solicitationSaved);
     }
 
     @PostMapping("/{protocolo}/status")
     public ResponseEntity<SolicitationModel> updateStatus(@PathVariable("protocolo") String protocol,
-                                                          @RequestBody UpdateStatusDTO dto) {
+                                                          @RequestBody UpdateStatusDTO dto,
+                                                          @AuthenticationPrincipal UserModel user) {
 
         return ResponseEntity.status(HttpStatus.CREATED).
                 body(service.updateStatus
-                        (protocol, dto.newStatus(), dto.comment(), dto.publicServantId()));
+                        (protocol, dto.newStatus(), dto.comment(), user.getEmail()));
     }
 
     @GetMapping("/{id}")
@@ -69,11 +74,12 @@ public class SolicitationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SolicitationModel> update(@PathVariable("id") Long id,
-                                                    @Valid @RequestBody SolicitationModel solicitation) {
+                                                    @Valid @RequestBody SolicitationCreateDTO dto,
+                                                    @AuthenticationPrincipal UserModel user) {
         if(service.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        SolicitationModel solicitationUpdated = service.update(id, solicitation);
+        SolicitationModel solicitationUpdated = service.update(id, dto, user.getEmail());
         return ResponseEntity.ok(solicitationUpdated);
     }
 }

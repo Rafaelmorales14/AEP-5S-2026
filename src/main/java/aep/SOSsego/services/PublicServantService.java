@@ -11,15 +11,24 @@ import java.util.Optional;
 public class PublicServantService {
 
     private final PublicServantRepository repository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
-    public PublicServantService(PublicServantRepository repository) {
+    public PublicServantService(PublicServantRepository repository, org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public PublicServantModel save(PublicServantModel servant) {
         if (repository.existsByCpf(servant.getCpf())){
             throw new RuntimeException("CPF ja cadastrado");
         }
+
+        if (passwordEncoder == null) {
+            throw new RuntimeException("PasswordEncoder não injetado");
+        }
+
+        servant.setPassword(passwordEncoder.encode(servant.getPassword()));
+        servant.setRole(aep.SOSsego.enums.RoleEnum.SERVIDOR_PUBLICO);
 
         return repository.save(servant);
     }

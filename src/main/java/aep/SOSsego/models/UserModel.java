@@ -36,7 +36,21 @@ public class UserModel implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        if (this.role == RoleEnum.ADMIN) {
+            return List.of(
+                    new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_ADMIN"),
+                    new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_SERVIDOR_PUBLICO"),
+                    new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_CIDADAO")
+            );
+        } else if (this.role == RoleEnum.SERVIDOR_PUBLICO) {
+            return List.of(
+                    new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_SERVIDOR_PUBLICO")
+            );
+        } else {
+            return List.of(
+                    new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_CIDADAO")
+            );
+        }
     }
 
     @Override

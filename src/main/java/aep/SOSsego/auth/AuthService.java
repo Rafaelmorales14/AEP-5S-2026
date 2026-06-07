@@ -40,6 +40,10 @@ public class AuthService {
             throw new RuntimeException("Email ja cadastrado");
         }
 
+        if(userRepository.existsByCpf(dto.cpf())) {
+            throw new RuntimeException("CPF ja cadastrado");
+        }
+
         CitizenModel citizenSaved = new CitizenModel();
 
         citizenSaved.setName(dto.name());
