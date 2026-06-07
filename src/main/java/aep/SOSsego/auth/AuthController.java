@@ -1,5 +1,6 @@
 package aep.SOSsego.auth;
 
+import aep.SOSsego.dtos.LoginDTO;
 import aep.SOSsego.dtos.RegisterDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,4 +26,8 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(registerDTO);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+        return ResponseEntity.ok(authService.login(dto));
+    }
 }

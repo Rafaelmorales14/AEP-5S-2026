@@ -22,4 +22,8 @@ public class AuthorizationService implements UserDetailsService {
                     findByEmail(email).
                     orElseThrow(() -> new UsernameNotFoundException("Usuario nao encontrado"));
     }
+
+    public Boolean existsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
 }
