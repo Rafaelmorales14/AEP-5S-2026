@@ -110,7 +110,8 @@ public class SolicitationService {
                 .orElseThrow(() -> new RuntimeException("Cidadão não encontrado"));
 
         if (!existingSolicitation.getIsAnonymous() && 
-            (existingSolicitation.getCitizen() == null || !existingSolicitation.getCitizen().getId().equals(citizen.getId()))) {
+            (existingSolicitation.getCitizen() == null ||
+                    !existingSolicitation.getCitizen().getId().equals(citizen.getId()))) {
             throw new RuntimeException("Você não tem permissão para alterar esta solicitação");
         }
 

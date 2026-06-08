@@ -26,10 +26,5 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
         return ResponseEntity.ok(authService.login(dto));
     }
-
-    @GetMapping("/teste")
-    public String teste() {
-        return "Autenticado";
-    }
 }
 

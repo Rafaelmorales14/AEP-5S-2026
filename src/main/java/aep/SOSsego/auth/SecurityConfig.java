@@ -2,6 +2,7 @@ package aep.SOSsego.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -32,10 +33,10 @@ public class SecurityConfig {
                                 "/auth/login",
                                 "/auth/register"
                         ).permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/servidor").hasRole("ADMIN")
-                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/servidor/**").hasRole("ADMIN")
-                        .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/servidor/**").hasRole("ADMIN")
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/servidor/**").hasAnyRole("ADMIN", "SERVIDOR_PUBLICO")
+                        .requestMatchers(HttpMethod.POST, "/servidor").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/servidor/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/servidor/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/servidor/**").hasAnyRole("ADMIN", "SERVIDOR_PUBLICO")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
