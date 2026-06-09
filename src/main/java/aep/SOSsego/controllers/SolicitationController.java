@@ -43,9 +43,10 @@ public class SolicitationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SolicitationModel> findById(@PathVariable("id") Long id) {
+    public ResponseEntity<SolicitationModel> findById(@PathVariable("id") Long id,
+                                                      @AuthenticationPrincipal UserModel user) {
         return service.
-                findById(id).
+                findById(id, user.getEmail()).
                 map(ResponseEntity::ok).
                 orElse(ResponseEntity.notFound().build());
     }
@@ -85,8 +86,9 @@ public class SolicitationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
-        if(service.findById(id).isEmpty()) {
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Long id,
+                                           @AuthenticationPrincipal UserModel user) {
+        if(service.findById(id, user.getEmail()).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         service.deleteById(id);
@@ -97,7 +99,7 @@ public class SolicitationController {
     public ResponseEntity<SolicitationModel> update(@PathVariable("id") Long id,
                                                     @Valid @RequestBody SolicitationCreateDTO dto,
                                                     @AuthenticationPrincipal UserModel user) {
-        if(service.findById(id).isEmpty()) {
+        if(service.findById(id, user.getEmail()).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         SolicitationModel solicitationUpdated = service.update(id, dto, user.getEmail());

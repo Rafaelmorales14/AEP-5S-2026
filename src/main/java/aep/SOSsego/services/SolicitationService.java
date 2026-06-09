@@ -1,18 +1,14 @@
 package aep.SOSsego.services;
 
+import aep.SOSsego.enums.RoleEnum;
 import aep.SOSsego.enums.StatusSolicitationEnum;
 import aep.SOSsego.dtos.SolicitationCreateDTO;
-import aep.SOSsego.models.CitizenModel;
-import aep.SOSsego.models.PublicServantModel;
-import aep.SOSsego.models.SolicitationModel;
-import aep.SOSsego.repositories.CitizenRepository;
-import aep.SOSsego.models.StatusHistoryModel;
-import aep.SOSsego.repositories.PublicServantRepository;
-import aep.SOSsego.repositories.SolicitationRepository;
-import aep.SOSsego.repositories.StatusHistoryRepository;
+import aep.SOSsego.models.*;
+import aep.SOSsego.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +24,7 @@ public class SolicitationService {
     private final PublicServantRepository publicServantRepository;
 
     private final CitizenRepository citizenRepository;
+    private final UserRepository userRepository;
 
     public SolicitationService(SolicitationRepository repository,
                                ProtocolService protocol,
@@ -36,7 +33,7 @@ public class SolicitationService {
                                StatusHistoryRepository historyRepository,
                                ValidateTransitionService validateTransitionService,
                                PublicServantRepository publicServantRepository,
-                               CitizenRepository citizenRepository) {
+                               CitizenRepository citizenRepository, UserRepository userRepository) {
         this.repository = repository;
         this.protocol = protocol;
         this.calculator = calculator;
@@ -45,6 +42,7 @@ public class SolicitationService {
         this.validateTransitionService = validateTransitionService;
         this.publicServantRepository = publicServantRepository;
         this.citizenRepository = citizenRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -81,8 +79,25 @@ public class SolicitationService {
         return saved;
     }
 
-    public Optional<SolicitationModel> findById(Long id) {
-        return repository.findById(id);
+    public Optional<SolicitationModel> findById(Long id, String email) {
+
+        SolicitationModel solicitation = repository.
+                findById(id).
+                orElseThrow(() -> new RuntimeException("Solicitacao nao encontrada"));
+
+        UserModel user = userRepository.
+                findByEmail(email).
+                orElseThrow(() -> new RuntimeException("Usuario nao existe"));
+
+        if (user.getRole() == RoleEnum.SERVIDOR_PUBLICO || user.getRole() == RoleEnum.ADMIN) {
+            return Optional.of(solicitation);
+        }
+
+        if(!solicitation.getCitizen().equals(user.getId())) {
+            throw new RuntimeException("Acesso negado");
+        }
+
+        return Optional.of(solicitation);
     }
 
     public List<SolicitationModel> findByCitizen(String citizenEmail) {
