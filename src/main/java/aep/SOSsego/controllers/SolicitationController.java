@@ -61,6 +61,7 @@ public class SolicitationController {
                     s.getProtocol(),
                     s.getDescription(),
                     s.getCategory(),
+                    s.isAnonymous(),
                     s.getCurrentlyStatus(),
                     s.getAddress(),
                     s.getCreatedAt()
