@@ -9,6 +9,7 @@ public record SolicitationResponseDTO(
         String protocol,
         String description,
         CategoryEnum category,
+        Boolean isAnonymous,
         StatusSolicitationEnum currentlyStatus,
         String address,
         LocalDateTime createdAt
