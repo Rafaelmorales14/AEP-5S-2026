@@ -1,5 +1,6 @@
 package aep.SOSsego.controllers;
 
+import aep.SOSsego.dtos.SolicitationResponseDTO;
 import aep.SOSsego.dtos.UpdateStatusDTO;
 import aep.SOSsego.dtos.SolicitationCreateDTO;
 import aep.SOSsego.models.SolicitationModel;
@@ -47,6 +48,25 @@ public class SolicitationController {
                 findById(id).
                 map(ResponseEntity::ok).
                 orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<SolicitationResponseDTO>> findByCitizen(@AuthenticationPrincipal UserModel user) {
+
+        List<SolicitationModel> solicitations = service.findByCitizen(user.getEmail());
+
+        List<SolicitationResponseDTO> response = solicitations.
+                stream().
+                map(s -> new SolicitationResponseDTO(
+                    s.getProtocol(),
+                    s.getDescription(),
+                    s.getCategory(),
+                    s.getCurrentlyStatus(),
+                    s.getAddress(),
+                    s.getCreatedAt()
+        )).toList();
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping

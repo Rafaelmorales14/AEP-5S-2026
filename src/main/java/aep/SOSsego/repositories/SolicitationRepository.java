@@ -1,5 +1,6 @@
 package aep.SOSsego.repositories;
 
+import aep.SOSsego.models.CitizenModel;
 import aep.SOSsego.models.SolicitationModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface SolicitationRepository extends JpaRepository<SolicitationModel, Long> {
     Optional<SolicitationModel> findByProtocol(String protocol);
+    List<SolicitationModel> findByCitizen(CitizenModel citizen);
 
     @Query("""
         SELECT s.priority, COUNT(s)
@@ -29,7 +31,7 @@ public interface SolicitationRepository extends JpaRepository<SolicitationModel,
     @Query("""
     SELECT s
     FROM SolicitationModel s
-    WHERE s.currentlyStatus <> StatusSolicitationEnum.ENCERRADO
+    WHERE s.currentlyStatus <> aep.SOSsego.enums.StatusSolicitationEnum.ENCERRADO
     ORDER BY s.priority DESC, s.dateSLA ASC
 """)
     List<SolicitationModel> findActiveSolicitations();

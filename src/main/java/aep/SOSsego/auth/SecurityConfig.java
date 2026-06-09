@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/servidor/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/servidor/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/servidor/**").hasAnyRole("ADMIN", "SERVIDOR_PUBLICO")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

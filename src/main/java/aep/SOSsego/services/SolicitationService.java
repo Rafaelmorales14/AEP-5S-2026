@@ -60,13 +60,12 @@ public class SolicitationService {
         solicitation.setPriority(priorityService.definePriority(solicitation.getCategory()));
         solicitation.setCurrentlyStatus(StatusSolicitationEnum.ABERTO);
 
-        if (Boolean.TRUE.equals(solicitation.getIsAnonymous())) {
-            solicitation.setCitizen(null);
-        } else {
-            CitizenModel citizen = citizenRepository.findByEmail(citizenEmail)
-                    .orElseThrow(() -> new RuntimeException("Cidadão não encontrado"));
-            solicitation.setCitizen(citizen);
-        }
+        CitizenModel citizen = citizenRepository.
+                findByEmail(citizenEmail).
+                orElseThrow(() -> new RuntimeException("Cidaão nao encontrado"));
+
+        solicitation.setCitizen(citizen);
+
 
         SolicitationModel saved = repository.save(solicitation);
 
@@ -84,6 +83,14 @@ public class SolicitationService {
 
     public Optional<SolicitationModel> findById(Long id) {
         return repository.findById(id);
+    }
+
+    public List<SolicitationModel> findByCitizen(String citizenEmail) {
+        CitizenModel citizen = citizenRepository.
+                findByEmail(citizenEmail).
+                orElseThrow(() -> new RuntimeException("Cidadao nao encontrado"));
+
+        return repository.findByCitizen(citizen);
     }
 
     public List<SolicitationModel> findAll() {
@@ -120,11 +127,8 @@ public class SolicitationService {
         existingSolicitation.setDescription(dto.description());
 
         existingSolicitation.setIsAnonymous(dto.isAnonymous());
-        if (Boolean.TRUE.equals(dto.isAnonymous())) {
-            existingSolicitation.setCitizen(null);
-        } else {
-            existingSolicitation.setCitizen(citizen);
-        }
+        existingSolicitation.setCitizen(citizen);
+
 
         return repository.save(existingSolicitation);
     }
