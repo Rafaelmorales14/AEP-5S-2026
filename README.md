@@ -63,7 +63,7 @@ src/main/java/aep/SOSsego/
 O projeto utiliza PostgreSQL. Utilize o Docker Compose para subir a instância configurada:
 
 ```sh
-docker-compose up -d
+docker-compose up -d ou docker compose up -d 
 ```
 
 ### Passo 2: Executar a Aplicação
